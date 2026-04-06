@@ -7,10 +7,10 @@ screen.title("US Game")
 maps.penup()
 maps.goto(0, 250)
 maps.write("States", align="center", font=("Arial", 18, "bold"))
-image = "D://Python\CSV_excel\day-25-us-states-game-start\states_img.gif"
+image = "states_img.gif"
 screen.addshape(image)
 turtle.shape(image)
-data = pandas.read_csv(r"D:\Python\CSV_excel\day-25-us-states-game-start\states.csv")
+data = pandas.read_csv(r"states.csv")
 score = 0
 should_continue = True
 while should_continue:
