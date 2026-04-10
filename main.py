@@ -1,18 +1,20 @@
 import turtle 
 import pandas
-
 screen = turtle.Screen()
 maps = turtle.Turtle()
-screen.title("US Game")
+screen.title("US StatesGame")
 maps.penup()
 maps.goto(0, 250)
 maps.write("States", align="center", font=("Arial", 18, "bold"))
-image = "D://Python\CSV_excel\day-25-us-states-game-start\states_img.gif"
+image = "states_img.gif"
 screen.addshape(image)
 turtle.shape(image)
-data = pandas.read_csv(r"D:\Python\CSV_excel\day-25-us-states-game-start\states.csv")
-score = 0
+data = pandas.read_csv(r"states.csv")
+guessed_state = []
+score,count = 0,0
 should_continue = True
+
+
 while should_continue:
     answer_box = screen.textinput(title="guess the state", prompt="Whats the another state name")
     if answer_box is None:
@@ -21,34 +23,34 @@ while should_continue:
         answer = answer_box.strip().lower()
         if answer == 'exit':
             should_continue = False
-            #print(f"Total Score : {score}")
-            maps.write(f"States : {score}", align="right", font=("Arial", 18, "bold"))
+            maps.penup()
+            maps.goto(354.0,281.0)
+            maps.write(f"States found : {score}", align="right", font=("Arial", 10,))
         else:
             lower_states = data.state.str.lower()
-            if answer in lower_states.values:
-                city = data[lower_states == answer]
-                x_axis = city.x.item()
-                y_axis = city.y.item()
-                maps.goto(x_axis, y_axis)
-                maps.write(city.state.item())
-                score = score + 1
-                maps.penup()
-                maps.goto(-323.0, 301.0)
-                maps.write(f"States : {score}", align="right", font=("Arial", 10, "bold"))
+            if count == 50:
+                should_continue = False
+                maps.write(f"Congratulations! Score {score} ", align="Center", font=("Calibri", 15,))
             else:
-                #print("State not found")
-                maps.penup()
-                maps.goto(-318.0, -283.0)
-                maps.write(f"States not found: current score {score}", align="left", font=("Arial", 10, "bold"))
-                #print(score)
-
-
-
-
-#def get_coordinate(x,y):
-#    print(x,y)
-
-
-#turtle.onscreenclick(get_coordinate)
-turtle.mainloop()
-#screen.exitonclick()
+                if answer in lower_states.values:
+                    if answer not in guessed_state:
+                        guessed_state.append(answer)
+                        city = data[lower_states == answer]
+                        maps.goto(city.x.item(), city.y.item())
+                        maps.write(city.state.item())
+                        score = score + 1
+                        count = count + 1
+                        maps.penup()
+                        maps.goto(-323.0, 301.0)
+                        maps.hideturtle()
+                        maps.write(f"States : {score}", align="right", font=("Calibri", 10,))
+                    else:
+                        maps.penup()
+                        maps.goto(342.0, -276.0)  
+                        maps.write(f"Guessed state is already guessed: current score {score}", align= "right", font= ("Calibri", 10))   
+                else:
+                    maps.penup()
+                    maps.goto(-318.0, -283.0)
+                    maps.write(f"States not found: current score {score}", align="left", font=("Calibri", 10, ))
+#turtle.mainloop()
+screen.exitonclick()
